@@ -1,5 +1,5 @@
 # datajack-mongo-adaptor
-[![Build Status](https://travis-ci.org/sbtqa/datajack-mongo-adaptor.svg?branch=master)](https://travis-ci.org/sbtqa/datajack-mongo-adaptor) [![GitHub release](https://img.shields.io/github/release/sbtqa/datajack-mongo-adaptor.svg?style=flat-square)](https://github.com/sbtqa/datajack-mongo-adaptor/releases) [![Maven Central](https://img.shields.io/maven-central/v/ru.sbtqa.tag/swing-back.svg)](https://mvnrepository.com/artifact/ru.sbtqa.tag/datajack-mongo-adaptor)
+[![Build Status](https://travis-ci.org/sbtqa/datajack-mongo-adaptor.svg?branch=master)](https://travis-ci.org/sbtqa/datajack-mongo-adaptor) [![GitHub release](https://img.shields.io/github/release/sbtqa/datajack-mongo-adaptor.svg?style=flat-square)](https://github.com/sbtqa/datajack-mongo-adaptor/releases)   
 
 datajack-mongo-adaptor is the realization of [DataJack](https://github.com/sbtqa/datajack). Implement support for mongodb.
 
