@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -58,6 +59,13 @@ public class MongoDataTest {
         TestDataObject tdo = new MongoDataObjectAdaptor(mongoDb, "DataBlocks");
         assertEquals("123qwe",
                 tdo.get("Common.password2").getValue());
+    }
+    
+    @Test
+    public void isReference() throws DataException {
+        TestDataObject tdo = new MongoDataObjectAdaptor(mongoDb, "DataBlocks");
+        assertTrue("Value is not reference",
+                tdo.get("Common.password2").isReference());
     }
 
     @Test

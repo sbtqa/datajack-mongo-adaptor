@@ -14,7 +14,6 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.sbtqa.tag.datajack.TestDataObject;
-import ru.sbtqa.tag.datajack.adaptors.AbstractDataObjectAdaptor;
 import ru.sbtqa.tag.datajack.callback.CallbackData;
 import ru.sbtqa.tag.datajack.callback.GeneratorCallback;
 import ru.sbtqa.tag.datajack.exceptions.CollectionNotfoundException;
@@ -231,5 +230,14 @@ public class MongoDataObjectAdaptor extends AbstractDataObjectAdaptor implements
     @Override
     public void applyGenerator(Class<? extends GeneratorCallback> callback) {
         this.callback = callback;
+    }
+
+    @Override
+    public boolean isReference() throws DataException {
+        Object value = this.basicObj.get(VALUE_TPL);
+        if (!(value instanceof BasicDBObject)) {
+            return false;
+        }
+        return ((BasicDBObject) value).containsField(COLLECTION_TPL) && ((BasicDBObject) value).containsField("path");
     }
 }
