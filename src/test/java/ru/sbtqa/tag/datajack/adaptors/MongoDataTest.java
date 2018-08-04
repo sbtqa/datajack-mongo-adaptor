@@ -2,9 +2,8 @@ package ru.sbtqa.tag.datajack.adaptors;
 
 import com.github.fakemongo.junit.FongoRule;
 import com.mongodb.DB;
-import com.mongodb.DBCollection;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -21,10 +20,7 @@ import static org.junit.Assert.*;
 import static org.junit.rules.ExpectedException.none;
 import static ru.sbtqa.tag.datajack.callback.SampleDataCache.getCache;
 
-@Ignore
 public class MongoDataTest {
-
-
 
         private final FongoRule fongoRule = new FongoRule(false);
 
@@ -33,13 +29,13 @@ public class MongoDataTest {
         @Rule
         public TestRule rules = RuleChain.outerRule(exception).around(fongoRule);
       
-        private static DB mongoDb;
+        private DB mongoDb;
     /**
      * @throws IOException if no json found
      *
      */
     @Before
-    public  void setUpClass() throws IOException {
+    public void setUpClass() throws IOException {
         fongoRule.insertFile(fongoRule.newCollection("Tests"), "/mongo/Tests.json");
         fongoRule.insertFile(fongoRule.newCollection("DataBlocks"), "/mongo/DataBlocks.json");
         mongoDb = fongoRule.getDB();
