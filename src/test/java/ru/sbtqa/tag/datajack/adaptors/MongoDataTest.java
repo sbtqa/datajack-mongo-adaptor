@@ -35,14 +35,10 @@ public class MongoDataTest {
      *
      */
     @Before
-    public void setUpClass() throws IOException {
+    public void setUp() throws IOException {
         fongoRule.insertFile(fongoRule.newCollection("Tests"), "/mongo/Tests.json");
         fongoRule.insertFile(fongoRule.newCollection("DataBlocks"), "/mongo/DataBlocks.json");
         mongoDb = fongoRule.getDB();
-    }
-
-    @Before
-    public void setUp() {
         getCache().clear();
     }
 
