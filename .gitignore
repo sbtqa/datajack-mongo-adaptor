@@ -9,3 +9,8 @@ buildNumber.properties
 .mvn/timing.properties
 /.idea
 /datajack-mongo-adaptor.iml
+/.settings
+/.vscode
+.classpath
+.project
+.factorypath

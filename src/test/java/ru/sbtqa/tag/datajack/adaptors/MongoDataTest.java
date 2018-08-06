@@ -1,53 +1,44 @@
 package ru.sbtqa.tag.datajack.adaptors;
 
+import com.github.fakemongo.junit.FongoRule;
 import com.mongodb.DB;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
-import static java.lang.String.format;
-import java.util.ArrayList;
-import java.util.List;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
+import ru.sbtqa.tag.datajack.TestDataObject;
+import ru.sbtqa.tag.datajack.callback.SampleDataGensCallback;
+import ru.sbtqa.tag.datajack.exceptions.*;
+
+import java.io.IOException;
+
+import static java.lang.String.format;
+import static org.junit.Assert.*;
 import static org.junit.rules.ExpectedException.none;
 import static ru.sbtqa.tag.datajack.callback.SampleDataCache.getCache;
-import ru.sbtqa.tag.datajack.callback.SampleDataGensCallback;
-import ru.sbtqa.tag.datajack.TestDataObject;
-import ru.sbtqa.tag.datajack.exceptions.CollectionNotfoundException;
-import ru.sbtqa.tag.datajack.exceptions.CyclicReferencesExeption;
-import ru.sbtqa.tag.datajack.exceptions.DataException;
-import ru.sbtqa.tag.datajack.exceptions.FieldNotFoundException;
-import ru.sbtqa.tag.datajack.exceptions.ReferenceException;
 
-@Ignore
 public class MongoDataTest {
 
-    private static DB mongoDb;
+        private final FongoRule fongoRule = new FongoRule(false);
 
+        private final ExpectedException exception = ExpectedException.none();
+
+        @Rule
+        public TestRule rules = RuleChain.outerRule(exception).around(fongoRule);
+      
+        private DB mongoDb;
     /**
+     * @throws IOException if no json found
      *
      */
-    @BeforeClass
-    public static void setUpClass() {
-
-        List<MongoCredential> credentialsList = new ArrayList<>();
-        MongoCredential bddbCred = MongoCredential.createCredential("bddb", "bddb", "123qwe".toCharArray());
-        credentialsList.add(bddbCred);
-
-        MongoClient client = new MongoClient(new ServerAddress("mongo"), credentialsList);
-
-        mongoDb = client.getDB("bddb");
-    }
-
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
+        fongoRule.insertFile(fongoRule.newCollection("Tests"), "/mongo/Tests.json");
+        fongoRule.insertFile(fongoRule.newCollection("DataBlocks"), "/mongo/DataBlocks.json");
+        mongoDb = fongoRule.getDB();
         getCache().clear();
     }
 
@@ -219,8 +210,7 @@ public class MongoDataTest {
         String cyclicPath = "Common.ref cyclic refid";
         TestDataObject tdo = new MongoDataObjectAdaptor(mongoDb, collection);
 
-        String cyclicObject = "{ \"value\" : { \"path\" : \"Common.failCyclicReferenceDifferentCollectionWithRefId\", "
-                + "\"collection\" : \"DataBlocks\", \"refId\" : { \"$oid\" : \"57a94a160a279ec293f61665\" } } }";
+        String cyclicObject = "{ \"value\" : { \"path\" : \"Common.failCyclicReferenceDifferentCollectionWithRefId\", \"collection\" : \"DataBlocks\", \"refId\" : \"57a94a160a279ec293f61665\" } }";
         expectDataExceptions
                 .expect(CyclicReferencesExeption.class);
         expectDataExceptions.expectMessage(format("Cyclic references in database:\n%s", cyclicObject));
